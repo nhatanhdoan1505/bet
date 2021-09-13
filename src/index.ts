@@ -16,7 +16,7 @@ const main = () => {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 8080;
 
   app.get("/esl", (req, res) => {
     let data = clawController.optimizeResult(ESL_2020_2021.data);
