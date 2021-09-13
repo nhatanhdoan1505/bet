@@ -19,6 +19,7 @@ const main = () => {
   const port = process.env.PORT || 8080;
 
   app.get("/", (req, res) => {
+    console.log("Get");
     let data = clawController.optimizeResult(ESL_2020_2021.data);
     res.status(200).json({
       msg: "Success",
