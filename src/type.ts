@@ -1,5 +1,32 @@
-export enum leage {
-  ESL = 4759,
+export interface ICornerData {
+  position: number;
+  team: string;
+  played: number;
+  allCorFor: number;
+  allCorAgst: number;
+  perGameCorFor: number;
+  perGameCorAgst: number;
+}
+
+export enum league {
+  ESL = "E0",
+  EC = "E1",
+  Bundesliga = "D1",
+  Seria = "I1",
+  Laliga = "SP1",
+  League1 = "F1",
+}
+
+export enum venue {
+  all = "T",
+  home = "H",
+  away = "A",
+}
+export interface IPayload {
+  league: league;
+  venue: venue;
+  season: string;
+  go: "Go!";
 }
 
 export const style = {

@@ -1,40 +1,32 @@
-// import puppeteer from "puppeteer";
-import cheerio from "cheerio";
-import { DataEntity, IDataRespone } from "type";
+import puppeteer from "puppeteer";
+import { DataEntity, ICornerData, IDataRespone } from "type";
 import excel4node from "excel4node";
 import { max } from "lodash";
 import { style } from "../type";
+import { Services } from "../utils/Services";
 
 export class ClawController {
   private html: string;
+  private service: Services = new Services();
 
-  // startBrower(url: string) {
-  //   (async () => {
-  //     const browser = await puppeteer.launch();
-  //     const page = await browser.newPage();
-  //     await page.goto(url, { waitUntil: "networkidle2" });
+  async startBrower(url: string) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setBypassCSP(true);
+    await page.goto(url, { waitUntil: "networkidle2" });
+    const html: string = await page.content();
+    await browser.close();
+    return html;
+  }
 
-  //     const bodyHandle = await page.$("body");
-
-  //     const html = await page.evaluate((body) => {
-  //       return body.innerHTML;
-  //     }, bodyHandle);
-
-  //     this.html = html;
-  //     await browser.close();
-  //   })();
-  // }
-
-  // loadHTML() {
-  //   let match = this.html.slice(
-  //     this.html.indexOf("live-table") + 'live-table">'.length,
-  //     this.html.indexOf('<div class="notificationsDialog "')
-  //   );
-  //   console.log(match);
-  //   const $ = cheerio.load(match.toString());
-  //   let round: any = $("div.sportName");
-  //   console.log(round[0].children[10]);
-  // }
+  async getCornerData({ league, venue, season }): Promise<{
+    data: ICornerData[];
+    content: string;
+  }> {
+    let endpoint = this.service.getEndpoint({ league, venue, season });
+    let html = await this.startBrower(endpoint);
+    return this.service.getDataCorner(html);
+  }
 
   optimizeResult(data: DataEntity[]): IDataRespone[] {
     let dataResponse: IDataRespone[] = data.map((d: DataEntity) => {
